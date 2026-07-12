@@ -108,20 +108,20 @@ class VOxParameters:
     # =================================================================
     # Govern the phase kinetics equation (Layer 2 of the derivation).
 
-    T_IMT: float = 340.0
+    T_IMT: float = 315.0
     """Insulator-to-Metal transition temperature (heating) [K].
 
     Critical temperature above which the metallic phase becomes
     thermodynamically stable during HEATING.
 
-    For bulk VO₂: T_IMT ≈ 340 K (67°C).
+    For our calibrated thin-film model: T_IMT = 315 K.
     Can be tuned by doping (e.g., W lowers it ~26 K per at.% W)
     or substrate strain.
 
     Appears in: φ_eq(T) via T_c (when dT/dt > 0)
     """
 
-    T_MIT: float = 330.0
+    T_MIT: float = 298.0
     """Metal-to-Insulator transition temperature (cooling) [K].
 
     Critical temperature below which the insulating phase becomes

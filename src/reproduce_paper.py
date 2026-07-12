@@ -27,11 +27,12 @@ def run_fig3():
         C_th=1.0e-9,
         G_th=5.0e-5,
         T_amb=295.0, # 295K cooling
-        T_IMT=308.0,
-        T_MIT=302.0,
+        T_IMT=315.0,
+        T_MIT=298.0,
         delta_T=4.0,
         R_insulating=25000.0,
         R_metallic=100.0,
+        tau_phi=10.0e-3, # Increased phase lag for wider hysteresis under current bias
         
         T_initial=295.0,
         phi_initial=0.0
@@ -57,13 +58,16 @@ def run_fig3():
 def run_fig5():
     print("Running simulation for Figure 5 (Current Bias Sweeps at 297K)...")
     
-    plt.figure(figsize=(6, 5))
+    fig, axs = plt.subplots(2, 3, figsize=(12, 8))
+    fig.suptitle("Reproduced Fig 5 (297 K) - Amplitude Sweeps", fontsize=14, fontweight='bold')
+    axs = axs.flatten()
     
     # Amplitudes matching ranges A-F roughly
     amplitudes = [1e-3, 3e-3, 5e-3, 10e-3, 15e-3, 20e-3]
     colors = ['black', 'red', 'blue', 'magenta', 'orange', 'green']
+    labels = ['A', 'B', 'C', 'D', 'E', 'F']
     
-    for amp, color in zip(amplitudes, colors):
+    for i, (amp, color, label) in enumerate(zip(amplitudes, colors, labels)):
         params = VOxParameters(
             bias_mode="current",
             waveform_type="triangular",
@@ -74,30 +78,32 @@ def run_fig5():
             C_th=1.0e-9,
             G_th=5.0e-5,
             T_amb=297.0,
-            T_IMT=308.0,
-            T_MIT=302.0,
+            T_IMT=315.0,
+            T_MIT=298.0,
             delta_T=4.0,
             R_insulating=25000.0,
             R_metallic=100.0,
+            tau_phi=10.0e-3,
             
             T_initial=297.0,
             phi_initial=0.0
         )
         
         result = solve_vox(params, n_eval=1000)
-        plt.plot(result.I * 1e3, result.V, color=color, linewidth=1.5, label=f"Max I={amp*1000:.0f}mA")
         
-    plt.xlabel("I (mA)", fontsize=12)
-    plt.ylabel("V (Volts)", fontsize=12)
-    plt.title("Reproduced Fig 5 (297 K)", fontsize=14)
-    plt.grid(True, alpha=0.3)
-    plt.legend()
-    
+        ax = axs[i]
+        ax.plot(result.I * 1e3, result.V, color=color, linewidth=1.5)
+        ax.set_title(label, loc='left', color=color, fontweight='bold')
+        ax.set_xlabel("I (mA)", fontsize=12)
+        ax.set_ylabel("V (Volts)", fontsize=12)
+        ax.grid(True, alpha=0.3)
+        ax.text(0.85, 0.1, f"Max I={amp*1000:.0f}mA", transform=ax.transAxes, fontsize=10, ha='center')
+        
+    plt.tight_layout()
     out_path = Path(__file__).parent.parent / "output" / "plots" / "reproduced_fig5.png"
     plt.savefig(out_path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"Saved to {out_path}")
-
 def run_fig6():
     print("Running simulation for Figure 6 (32 Voltage Sweeps)...")
     
@@ -105,17 +111,18 @@ def run_fig6():
         bias_mode="voltage",
         waveform_type="triangular",
         V_amplitude=10.0, # 10 V peak
-        frequency=1.0,
+        frequency=1.0, # Normal frequency
         n_cycles=10, # Doing 10 cycles to show evolution
         
-        C_th=1.0e-9,
-        G_th=5.0e-5,
+        C_th=1.0e-9, # Fast thermal mass to keep jump near V≈0
+        G_th=5.0e-5,  
         T_amb=297.0,
-        T_IMT=308.0,
-        T_MIT=302.0,
+        T_IMT=315.0,
+        T_MIT=298.0,
         delta_T=4.0,
         R_insulating=25000.0,
-        R_metallic=100.0,
+        R_metallic=300.0, # Specifically set to 300 ohms so 10V peaks at ~30mA to match Fig 6
+        tau_phi=50.0e-3, # Slower phase kinetics to produce physical cycle-to-cycle memory drift
         
         T_initial=297.0,
         phi_initial=0.0

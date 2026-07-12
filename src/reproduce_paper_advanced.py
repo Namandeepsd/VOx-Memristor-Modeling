@@ -22,15 +22,17 @@ def generate_fig3_ndr():
     print("[Advanced Model] Running Fig 3 (V-I at 295K, NDR)...")
     p = AdvancedVOxParameters()
     p.T_amb = 295.0
-    p.C_p = 5.0e-9 
-    p.R_i_ref = 25000.0
+    p.C_p = 1.0e-12 
+    p.R_i_ref = 12000.0
     p.R_m_0 = 100.0
     p.R_contact = 75.0
+    p.tau_phi_0 = 4.0e-5
+    p.G_th_0 = 1.5e-4
     
-    freq = 0.1
+    freq = 1.0
     t_end = 1.0 / freq
     t_eval = np.linspace(0, t_end, 10000)
-    I_max = 1.0e-3
+    I_max = 1.5e-3
     
     def I_waveform(t):
         t = np.asarray(t)
@@ -73,14 +75,14 @@ def generate_fig5_multi_amplitude():
     p = AdvancedVOxParameters()
     p.T_amb = 297.0
     p.C_p = 1.0e-12     # Minimize C_p to prevent oscillations
-    p.R_i_ref = 25000.0  # Insulating resistance
+    p.R_i_ref = 12000.0  # Insulating resistance
     p.R_m_0 = 100.0      # Metallic resistance
     p.R_contact = 75.0   # Contact resistance
     
     p.T_IMT = 315.0
     p.T_MIT = 298.0
     
-    p.G_th_0 = 2.0e-4   # Thermal conductance (device heats up properly)
+    p.G_th_0 = 6.0e-4   # Increased thermal conductance to prevent temperature overshoot
     p.C_th = 2.0e-9      # Fast thermal response (device reaches steady-state T quickly)
     
     # FIGURE-8 KEY: Phase lag creates the enclosed loops!

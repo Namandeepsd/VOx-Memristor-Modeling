@@ -6,13 +6,13 @@ from dataclasses import dataclass
 class AdvancedVOxParameters:
     # ---------------- Thermal Parameters ----------------
     C_th: float = 5.0e-9            # Thermal mass [J/K]
-    G_th_0: float = 3.0e-4          # Base thermal conductance [W/K]
-    G_th_nonlinear: float = 5.0e-7  # Non-linear thermal conductance [W/K^2]
+    G_th_0: float = 6.0e-4          # Base thermal conductance [W/K]
+    G_th_nonlinear: float = 2.0e-6  # Non-linear thermal conductance [W/K^2]
     T_amb: float = 297.0            # Ambient temperature [K]
     
     # ---------------- Transition Parameters ----------------
-    T_IMT: float = 308.0            # Heating transition temp [K]
-    T_MIT: float = 300.0            # Cooling transition temp [K]
+    T_IMT: float = 315.0            # Heating transition temp [K]
+    T_MIT: float = 298.0            # Cooling transition temp [K]
     delta_T: float = 3.5            # Transition width parameter [K]
     L_latent: float = 5.0e-9        # Latent heat [J]
     
@@ -28,7 +28,7 @@ class AdvancedVOxParameters:
     E_a_kinetics: float = 0.15      # Activation energy for domain nucleation [eV]
 
     # ---------------- Parasitics (3-ODE Specific) ----------------
-    C_p: float = 2.0e-9             # Parasitic parallel capacitance [F] (2 nF for strong snap-back)
+    C_p: float = 1.0e-12             # Parasitic parallel capacitance [F] (Minimized to prevent ringing)
     R_series: float = 50.0          # Additional series load/contact resistance outside device loop [Ohms]
 
 k_B = 8.617333262145e-5 # eV/K
